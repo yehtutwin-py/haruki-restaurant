@@ -1,0 +1,143 @@
+{% extends 'restaurant/base.html' %} {% load static %} {% block title
+%}Tonight's Menu{% endblock %} {% block content %}
+
+<section class="section section-cream">
+  <div class="container" style="max-width: 760px">
+    <span class="eyebrow">Dinner</span>
+    <h1 style="font-size: 3rem">Tonight's Menu</h1>
+    <div class="divider-gold-left"></div>
+    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 3rem">
+      {{ today|date:"l, j F Y" }}
+    </p>
+
+    {% if is_closed %}
+    <div class="closed-notice">
+      We are closed every Monday.<br />
+      <span
+        style="
+          font-size: 1rem;
+          opacity: 0.6;
+          font-family: &quot;Jost&quot;, sans-serif;
+          font-weight: 300;
+          letter-spacing: 0.1em;
+        "
+      >
+        We look forward to welcoming you from Tuesday.
+      </span>
+    </div>
+
+    {% elif menu %} {% if menu.note %}
+    <div class="alert-elegant mb-4">
+      <i class="bi bi-stars me-2" style="color: var(--gold)"></i>{{ menu.note }}
+    </div>
+    {% endif %}
+
+    <!-- Main dishes -->
+    {% with menu.get_mains as mains %} {% if mains %}
+    <div class="mb-5">
+      <p class="menu-course-header">Main Dish</p>
+      {% for item in mains %}
+      <div class="menu-item">
+        {% if item.image %}
+        <img
+          src="{{ item.image.url }}"
+          alt="{{ item.name }}"
+          style="
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+          "
+        />
+        {% endif %}
+        <div>
+          <div class="menu-item-name">{{ item.name }}</div>
+          <div class="menu-item-desc">{{ item.description }}</div>
+          {% if item.allergens %}
+          <div class="menu-item-allergens">Contains: {{ item.allergens }}</div>
+          {% endif %}
+        </div>
+        <div class="menu-item-price">${{ item.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <!-- Side dishes -->
+    {% with menu.get_sides as sides %} {% if sides %}
+    <div class="mb-5">
+      <p class="menu-course-header">Side Dish</p>
+      {% for item in sides %}
+      <div class="menu-item">
+        {% if item.image %}
+        <img
+          src="{{ item.image.url }}"
+          alt="{{ item.name }}"
+          style="
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+          "
+        />
+        {% endif %}
+        <div>
+          <div class="menu-item-name">{{ item.name }}</div>
+          <div class="menu-item-desc">{{ item.description }}</div>
+          {% if item.allergens %}
+          <div class="menu-item-allergens">Contains: {{ item.allergens }}</div>
+          {% endif %}
+        </div>
+        <div class="menu-item-price">${{ item.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <!-- Desserts -->
+    {% with menu.get_desserts as desserts %} {% if desserts %}
+    <div class="mb-5">
+      <p class="menu-course-header">Dessert</p>
+      {% for item in desserts %}
+      <div class="menu-item">
+        {% if item.image %}
+        <img
+          src="{{ item.image.url }}"
+          alt="{{ item.name }}"
+          style="
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+          "
+        />
+        {% endif %}
+        <div>
+          <div class="menu-item-name">{{ item.name }}</div>
+          <div class="menu-item-desc">{{ item.description }}</div>
+          {% if item.allergens %}
+          <div class="menu-item-allergens">Contains: {{ item.allergens }}</div>
+          {% endif %}
+        </div>
+        <div class="menu-item-price">${{ item.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <div class="mt-4">
+      <a href="{% url 'reserve' %}" class="btn-gold-solid">Reserve a Table</a>
+    </div>
+
+    {% else %}
+    <p style="color: var(--muted); font-size: 1.05rem">
+      Tonight's menu has not been published yet. Please check back later.
+    </p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}Reservations — Haruki{% endblock %}
+
+{% block content %}
+<section class="section section-cream">
+    <div class="container" style="max-width:640px">
+
+        <span class="eyebrow">Book a Table</span>
+        <h1 style="font-size:3rem">Reservations</h1>
+        <div class="divider-gold-left"></div>
+        <p style="color:var(--muted);margin-bottom:3rem;font-size:0.95rem">
+            Tuesday through Sunday &mdash; 6:00 PM to 9:00 PM.<br>
+            We are closed every Monday. Bookings require at least 24 hours notice.
+        </p>
+
+        <form method="post" class="reserve-form">
+            {% csrf_token %}
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="guest_name" class="form-control"
+                           required placeholder="e.g. James Anderson">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control"
+                           required placeholder="e.g. james@email.com">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" name="phone" class="form-control"
+                           required placeholder="e.g. +66 81 234 5678">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Number of Guests</label>
+                    <select name="party_size" class="form-select" required>
+                        <option value="">Select number of guests</option>
+                        <option value="1">1 guest</option>
+                        <option value="2">2 guests</option>
+                        <option value="3">3 guests</option>
+                        <option value="4">4 guests</option>
+                        <option value="5">5 guests</option>
+                        <option value="6">6 guests</option>
+                        <option value="7">7 guests</option>
+                        <option value="8">8 guests</option>
+                        <option value="10">10 guests</option>
+                        <option value="12">12 guests (private dining)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Preferred Date</label>
+                    <input type="date" name="date" id="booking-date"
+                           class="form-control" required min="{{ min_date }}">
+                    <small style="color:var(--muted);font-size:0.75rem;margin-top:0.3rem;display:block">
+                        Mondays are unavailable — we are closed.
+                    </small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Dinner Time</label>
+                    <select name="time_slot" id="time-slot" class="form-select" required>
+                        <option value="">Select a time</option>
+                        {% for value, label in time_slots %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Special Requests</label>
+                    <textarea name="special_requests" class="form-control" rows="3"
+                              placeholder="e.g. Allergic to shellfish, celebrating an anniversary, window seat preferred..."></textarea>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <button type="submit" id="submit-btn"
+                            class="btn-gold-solid w-100"
+                            style="padding:1rem;font-size:0.82rem">
+                        Request Reservation
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+</section>
+
+{{ booked_set|json_script:"booked-data" }}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'restaurant/js/reserve.js' %}"></script>
+{% endblock %}

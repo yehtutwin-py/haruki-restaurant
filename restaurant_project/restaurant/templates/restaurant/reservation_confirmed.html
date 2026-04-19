@@ -1,0 +1,50 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Reservation Confirmed{% endblock %}
+
+{% block content %}
+<section class="section section-cream">
+    <div class="container">
+        <div class="confirm-box">
+            <div class="confirm-icon">&#10022;</div>
+            <span class="eyebrow">Thank You</span>
+            <h2 style="font-size:2.2rem;margin-bottom:0.5rem">Reservation Received</h2>
+            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2.5rem">
+                We will confirm your booking by email shortly.
+            </p>
+
+            <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.8rem 0;margin-bottom:2rem;text-align:left">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="contact-detail">Guest</div>
+                        <div class="contact-value">{{ reservation.guest_name }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="contact-detail">Party Size</div>
+                        <div class="contact-value">{{ reservation.party_size }} guest{{ reservation.party_size|pluralize }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="contact-detail">Date</div>
+                        <div class="contact-value">{{ reservation.date|date:"l, j F Y" }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="contact-detail">Time</div>
+                        <div class="contact-value">{{ reservation.get_time_slot_display }}</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="contact-detail">Status</div>
+                        <span class="status-pill status-{{ reservation.status }}">{{ reservation.get_status_display }}</span>
+                    </div>
+                    {% if reservation.special_requests %}
+                    <div class="col-12">
+                        <div class="contact-detail">Special Requests</div>
+                        <div style="font-size:0.9rem;color:var(--mid)">{{ reservation.special_requests }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <a href="{% url 'home' %}" class="btn-gold">Return Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

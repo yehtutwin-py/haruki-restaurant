@@ -1,0 +1,75 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}About Us — Haruki{% endblock %}
+
+{% block content %}
+
+<section class="section section-dark">
+    <div class="container" style="max-width:700px">
+        <span class="eyebrow" style="color:var(--gold-lt)">Our Story</span>
+        <h1 style="font-size:3.2rem;color:#fff">About the Restaurant</h1>
+        <div class="divider-gold-left"></div>
+    </div>
+</section>
+
+<section class="section section-cream">
+    <div class="container" style="max-width:700px">
+
+        {% if info %}
+
+            {% if info.story %}
+            <div class="about-quote">{{ info.story|truncatewords:30 }}</div>
+            <p style="color:var(--mid);line-height:2;margin-bottom:3rem">
+                {{ info.story }}
+            </p>
+            {% endif %}
+
+            <span class="eyebrow">History</span>
+            <h2 style="font-size:2rem;margin-bottom:1rem">Our Heritage</h2>
+            <div class="divider-gold-left"></div>
+
+            {% if info.history %}
+            <p style="color:var(--mid);line-height:2;margin-top:1.5rem;margin-bottom:3rem">
+                {{ info.history }}
+            </p>
+            {% endif %}
+
+            {% if info.chef_name %}
+            <div style="border-top:1px solid var(--border);padding-top:3rem;margin-top:1rem">
+
+                {% if info.chef_image %}
+                <img src="{{ info.chef_image.url }}"
+                    alt="{{ info.chef_name }}"
+                    style="width:100%;max-width:500px;height:auto;display:block;margin-bottom:2rem;border:1px solid var(--border)">
+                {% endif %}
+
+                <span class="eyebrow">The Kitchen</span>
+                <h2 style="font-size:2rem;margin-bottom:0.5rem">{{ info.chef_name }}</h2>
+                <p style="color:var(--gold);font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem">
+                    Head Chef
+                </p>
+                <div class="divider-gold-left"></div>
+
+                {% if info.chef_bio %}
+                <p style="color:var(--mid);line-height:2;margin-top:1.5rem">
+                    {{ info.chef_bio }}
+                </p>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        {% else %}
+            <p style="color:var(--muted)">Restaurant information coming soon.</p>
+        {% endif %}
+
+        <div class="mt-5">
+            <a href="{% url 'reserve' %}" class="btn-gold-solid me-3">Reserve a Table</a>
+            <a href="{% url 'menu' %}" class="btn-gold">Tonight's Menu</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

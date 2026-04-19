@@ -1,0 +1,111 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+{% block title %}{% if info %}{{ info.name }}{% endif %} — Fine Dining{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="hero">
+    {% if info.hero_image %}
+    <div style="position:absolute;inset:0;z-index:0">
+        <img src="{{ info.hero_image.url }}"
+             style="width:100%;height:100%;object-fit:cover;opacity:0.35">
+    </div>
+    {% endif %}
+    <div class="hero-inner">
+        <span class="hero-eyebrow">Est. 2010 &nbsp;&bull;&nbsp; Fine Dining</span>
+        <h1>{% if info %}{{ info.name }}{% else %}Haruki{% endif %}</h1>
+        <p>{% if info %}{{ info.tagline }}{% else %}An unforgettable dining experience.{% endif %}</p>
+        <a href="{% url 'reserve' %}" class="btn-gold me-3">Reserve a Table</a>
+        <a href="{% url 'menu' %}" class="btn-gold">Tonight's Menu</a>
+    </div>
+</section>
+
+<!-- Tonight's menu preview -->
+<section class="section section-cream">
+    <div class="container text-center">
+        <span class="eyebrow">Dinner</span>
+        <h2 style="font-size:2.6rem">Tonight's Menu</h2>
+        <div class="divider-gold"></div>
+
+        {% if is_closed %}
+            <p class="mt-4" style="color:var(--muted);font-size:1.05rem">
+                We are closed on Mondays. We look forward to welcoming you from Tuesday.
+            </p>
+        {% elif today_menu %}
+            <div class="row g-4 mt-3 text-start">
+                {% with today_menu.get_mains as mains %}
+                {% if mains %}
+                <div class="col-md-4">
+                    <p class="menu-course-header">Main</p>
+                    {% for item in mains %}
+                    <div class="menu-item">
+                        <div>
+                            <div class="menu-item-name">{{ item.name }}</div>
+                            <div class="menu-item-desc">{{ item.description|truncatewords:12 }}</div>
+                        </div>
+                        <div class="menu-item-price">${{ item.price }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                {% with today_menu.get_sides as sides %}
+                {% if sides %}
+                <div class="col-md-4">
+                    <p class="menu-course-header">Side</p>
+                    {% for item in sides %}
+                    <div class="menu-item">
+                        <div>
+                            <div class="menu-item-name">{{ item.name }}</div>
+                            <div class="menu-item-desc">{{ item.description|truncatewords:12 }}</div>
+                        </div>
+                        <div class="menu-item-price">${{ item.price }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                {% with today_menu.get_desserts as desserts %}
+                {% if desserts %}
+                <div class="col-md-4">
+                    <p class="menu-course-header">Dessert</p>
+                    {% for item in desserts %}
+                    <div class="menu-item">
+                        <div>
+                            <div class="menu-item-name">{{ item.name }}</div>
+                            <div class="menu-item-desc">{{ item.description|truncatewords:12 }}</div>
+                        </div>
+                        <div class="menu-item-price">${{ item.price }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="mt-5">
+                <a href="{% url 'menu' %}" class="btn-gold">View Full Menu</a>
+            </div>
+        {% else %}
+            <p class="mt-4" style="color:var(--muted)">Tonight's menu will be announced soon.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Reserve CTA -->
+<section class="section section-dark text-center">
+    <div class="container">
+        <span class="eyebrow" style="color:var(--gold-lt)">Reservations</span>
+        <h2 style="font-size:2.6rem;color:#fff">Join Us for Dinner</h2>
+        <div class="divider-gold"></div>
+        <p style="color:rgba(255,255,255,0.6);max-width:440px;margin:1.5rem auto 2.5rem;font-size:0.95rem">
+            Dinner is served Tuesday through Sunday, from 6:00 PM.<br>
+            We recommend booking at least 24 hours in advance.
+        </p>
+        <a href="{% url 'reserve' %}" class="btn-gold-solid">Make a Reservation</a>
+    </div>
+</section>
+
+{% endblock %}

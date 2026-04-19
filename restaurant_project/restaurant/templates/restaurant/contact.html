@@ -1,0 +1,40 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<section class="section section-cream">
+    <div class="container" style="max-width:640px">
+
+        <span class="eyebrow">Find Us</span>
+        <h1 style="font-size:3rem">Contact</h1>
+        <div class="divider-gold-left"></div>
+
+        <div class="row g-5 mt-2">
+            <div class="col-md-6">
+                <div class="contact-detail">Address</div>
+                <div class="contact-value">{% if info %}{{ info.address }}{% endif %}</div>
+
+                <div class="contact-detail">Telephone</div>
+                <div class="contact-value">{% if info %}{{ info.phone }}{% endif %}</div>
+
+                <div class="contact-detail">Email</div>
+                <div class="contact-value">{% if info %}{{ info.email }}{% endif %}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="contact-detail">Dinner Hours</div>
+                <div class="contact-value">6:00 PM – 9:00 PM</div>
+
+                <div class="contact-detail">Open</div>
+                <div class="contact-value">Tuesday – Sunday</div>
+
+                <div class="contact-detail">Closed</div>
+                <div class="contact-value">Every Monday</div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <a href="{% url 'reserve' %}" class="btn-gold-solid">Make a Reservation</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

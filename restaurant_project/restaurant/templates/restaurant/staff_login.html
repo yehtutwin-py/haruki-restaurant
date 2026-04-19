@@ -1,0 +1,48 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}Staff Login — Haruki{% endblock %}
+
+{% block content %}
+<section class="section section-cream">
+    <div class="container" style="max-width:420px">
+
+        <span class="eyebrow">Staff Access</span>
+        <h1 style="font-size:2.6rem">Sign In</h1>
+        <div class="divider-gold-left"></div>
+        <p style="color:var(--muted);margin-bottom:2.5rem;font-size:0.9rem">
+            This page is for Haruki staff only.
+        </p>
+
+        <form method="post" class="reserve-form">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="alert-error mb-4">
+                Incorrect username or password. Please try again.
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control"
+                       autofocus placeholder="e.g. admin">
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control"
+                       placeholder="Your password">
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <button type="submit" class="btn-gold-solid w-100"
+                    style="padding:1rem;font-size:0.82rem">
+                Sign In
+            </button>
+        </form>
+
+    </div>
+</section>
+{% endblock %}

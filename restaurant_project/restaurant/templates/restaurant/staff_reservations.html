@@ -1,0 +1,202 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}Reservations — Haruki Staff{% endblock %}
+
+{% block content %}
+<section class="section-sm section-cream">
+    <div class="container">
+
+        <!-- Header -->
+        <div style="font-size:0.82rem;color:var(--muted);text-align:right">
+            Logged in as <strong style="color:var(--dark)">{{ request.user.username }}</strong><br>
+            <a href="{% url 'staff_logout' %}"
+            style="color:#c0392b;font-size:0.78rem;text-decoration:none;border-bottom:1px solid #c0392b">
+                Sign out
+            </a>
+            &nbsp;&bull;&nbsp;
+            <a href="/admin/" style="color:var(--gold)">Admin panel</a>
+        </div>
+
+        <!-- Filters -->
+        <form method="get" class="d-flex gap-3 align-items-end mb-5 flex-wrap">
+            <div>
+                <label style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem">
+                    Status
+                </label>
+                <select name="status" class="form-select" style="border-radius:0;border-color:var(--border);min-width:160px"
+                        onchange="this.form.submit()">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All statuses</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem">
+                    Date
+                </label>
+                <input type="date" name="date" value="{{ date_filter }}"
+                       class="form-control" style="border-radius:0;border-color:var(--border)"
+                       onchange="this.form.submit()">
+            </div>
+            {% if status_filter != 'all' or date_filter %}
+            <div>
+                <a href="{% url 'staff_reservations' %}"
+                   style="font-size:0.78rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--muted);padding-bottom:2px">
+                    Clear filters
+                </a>
+            </div>
+            {% endif %}
+        </form>
+
+        <!-- Summary counts -->
+        <div class="row g-3 mb-5">
+            <div class="col-6 col-md-3">
+                <div style="border:1px solid var(--border);padding:1.2rem;text-align:center">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--dark)">
+                        {{ reservations|length }}
+                    </div>
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">
+                        Showing
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="border:1px solid var(--border);padding:1.2rem;text-align:center">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#856404">
+                        {{ pending_count }}
+                    </div>
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">
+                        Pending
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="border:1px solid var(--border);padding:1.2rem;text-align:center">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#0a6640">
+                        {{ confirmed_count }}
+                    </div>
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">
+                        Confirmed
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="border:1px solid var(--border);padding:1.2rem;text-align:center">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold)">
+                        {{ total_guests }}
+                    </div>
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">
+                        Total Guests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reservations table -->
+        {% if reservations %}
+        <div style="border:1px solid var(--border);overflow:hidden">
+            <table class="table mb-0" style="font-size:0.9rem">
+                <thead style="background:var(--dark);color:rgba(255,255,255,0.85)">
+                    <tr>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">#</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Guest</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Date</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Time</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Guests</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Contact</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Status</th>
+                        <th style="padding:1rem;font-weight:400;letter-spacing:0.08em;font-size:0.78rem;text-transform:uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reservations %}
+                    <tr class="{% if r.status == 'cancelled' %}row-cancelled{% endif %}" style="border-bottom:1px solid var(--border)">
+                        <td style="padding:1rem;color:var(--muted)">#{{ r.pk }}</td>
+                        <td style="padding:1rem">
+                            <strong style="color:var(--dark)">{{ r.guest_name }}</strong>
+                            {% if r.special_requests %}
+                            <div style="font-size:0.78rem;color:var(--gold);margin-top:0.2rem">
+                                &#9432; {{ r.special_requests|truncatewords:8 }}
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td style="padding:1rem;color:var(--mid)">
+                            {{ r.date|date:"D, d M Y" }}
+                        </td>
+                        <td style="padding:1rem;color:var(--mid)">
+                            {{ r.get_time_slot_display }}
+                        </td>
+                        <td style="padding:1rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--dark)">
+                            {{ r.party_size }}
+                        </td>
+                        <td style="padding:1rem">
+                            <div style="font-size:0.82rem;color:var(--muted)">{{ r.email }}</div>
+                            <div style="font-size:0.82rem;color:var(--muted)">{{ r.phone }}</div>
+                        </td>
+                        <td style="padding:1rem">
+                            <span class="status-pill status-{{ r.status }}">
+                                {{ r.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="padding:1rem">
+                            <form method="post"
+                                  action="{% url 'update_reservation' r.pk %}"
+                                  class="d-flex gap-2 flex-wrap">
+                                {% csrf_token %}
+
+                                {% if r.status == 'pending' %}
+                                <button name="status" value="confirmed"
+                                        class="btn-gold-solid"
+                                        style="font-size:0.72rem;padding:0.4rem 0.9rem;white-space:nowrap">
+                                    Confirm
+                                </button>
+                                <button name="status" value="cancelled"
+                                        style="font-size:0.72rem;padding:0.4rem 0.9rem;white-space:nowrap;background:transparent;border:1px solid #c0392b;color:#c0392b;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">
+                                    Cancel
+                                </button>
+
+                                {% elif r.status == 'confirmed' %}
+                                <button name="status" value="completed"
+                                        class="btn-gold"
+                                        style="font-size:0.72rem;padding:0.4rem 0.9rem;white-space:nowrap">
+                                    Complete
+                                </button>
+                                <button name="status" value="cancelled"
+                                        style="font-size:0.72rem;padding:0.4rem 0.9rem;white-space:nowrap;background:transparent;border:1px solid #c0392b;color:#c0392b;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">
+                                    Cancel
+                                </button>
+
+                                {% elif r.status == 'cancelled' %}
+                                <button name="status" value="pending"
+                                        style="font-size:0.72rem;padding:0.4rem 0.9rem;white-space:nowrap;background:transparent;border:1px solid var(--border);color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">
+                                    Restore
+                                </button>
+
+                                {% else %}
+                                <span style="font-size:0.78rem;color:var(--muted)">—</span>
+                                {% endif %}
+
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div style="text-align:center;padding:5rem 0;color:var(--muted)">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin-bottom:0.5rem">
+                No reservations found
+            </div>
+            <div style="font-size:0.88rem">Try clearing the filters above.</div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
