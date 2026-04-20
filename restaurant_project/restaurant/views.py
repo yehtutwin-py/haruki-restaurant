@@ -5,7 +5,7 @@ from .models import RestaurantInfo, DailyMenu, Reservation, CLOSED_DAYS, TIME_SL
 import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-
+from .emails import send_reservation_confirmation, send_reservation_update
 def get_info():
     return RestaurantInfo.objects.first()
 
@@ -92,6 +92,7 @@ def reserve(request):
             special_requests = special,
             status           = 'pending',
         )
+        send_reservation_confirmation(reservation)
         messages.success(request, f'Thank you, {guest_name}! Your reservation request has been received.')
         return redirect('reservation_confirmed', pk=reservation.pk)
 
@@ -160,6 +161,7 @@ def update_reservation(request, pk):
         if new_status in dict(Reservation.STATUS_CHOICES):
             reservation.status = new_status
             reservation.save()
+            send_reservation_update(reservation) 
             messages.success(request, f'Reservation #{reservation.pk} updated to {reservation.get_status_display()}.')
 
     return redirect('staff_reservations')

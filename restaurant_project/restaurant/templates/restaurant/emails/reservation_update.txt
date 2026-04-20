@@ -1,0 +1,29 @@
+Dear {{ reservation.guest_name }},
+
+Your reservation at Haruki has been updated.
+
+─────────────────────────────
+RESERVATION #{{ reservation.pk }}
+─────────────────────────────
+Date:        {{ reservation.date|date:"l, d F Y" }}
+Time:        {{ reservation.get_time_slot_display }}
+Party size:  {{ reservation.party_size }} guest{{ reservation.party_size|pluralize }}
+Status:      {{ reservation.get_status_display }}
+─────────────────────────────
+
+{% if reservation.status == 'confirmed' %}
+Your reservation is confirmed. We look forward to
+welcoming you on {{ reservation.date|date:"l, d F Y" }}.
+{% elif reservation.status == 'cancelled' %}
+Your reservation has been cancelled. We hope to
+welcome you at Haruki on another occasion.
+{% endif %}
+
+If you have any questions please contact us:
+
+    Phone: +66 2 123 4567
+    Email: reservations@haruki-bkk.com
+
+Warm regards,
+Haruki Restaurant
+28 Silom Road, Bangrak, Bangkok 10500

@@ -1,40 +1,103 @@
 {% extends 'restaurant/base.html' %}
-{% block title %}Contact{% endblock %}
+{% load static %}
+
+{% block title %}Contact — Haruki{% endblock %}
 
 {% block content %}
-<section class="section section-cream">
-    <div class="container" style="max-width:640px">
 
-        <span class="eyebrow">Find Us</span>
-        <h1 style="font-size:3rem">Contact</h1>
+<!-- Page header -->
+<section class="section-sm section-dark">
+    <div class="container" style="max-width:700px">
+        <span class="eyebrow" style="color:var(--gold-lt)">Find Us</span>
+        <h1 style="font-size:3rem;color:#fff">Contact</h1>
         <div class="divider-gold-left"></div>
+    </div>
+</section>
 
-        <div class="row g-5 mt-2">
-            <div class="col-md-6">
-                <div class="contact-detail">Address</div>
-                <div class="contact-value">{% if info %}{{ info.address }}{% endif %}</div>
+<!-- Details + Map -->
+<section class="section section-cream">
+    <div class="container">
+        <div class="row g-5">
 
-                <div class="contact-detail">Telephone</div>
-                <div class="contact-value">{% if info %}{{ info.phone }}{% endif %}</div>
+            <!-- Left — contact details -->
+            <div class="col-lg-4">
 
-                <div class="contact-detail">Email</div>
-                <div class="contact-value">{% if info %}{{ info.email }}{% endif %}</div>
+                <div class="mb-5">
+                    <div class="contact-detail">Address</div>
+                    <div class="contact-value">
+                        {% if info %}{{ info.address }}{% else %}
+                        28 Silom Road, Bangrak<br>Bangkok 10500
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <div class="contact-detail">Telephone</div>
+                    <div class="contact-value">
+                        {% if info %}
+                        <a href="tel:{{ info.phone }}"
+                           style="color:var(--dark);text-decoration:none">
+                            {{ info.phone }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <div class="contact-detail">Email</div>
+                    <div class="contact-value">
+                        {% if info %}
+                        <a href="mailto:{{ info.email }}"
+                           style="color:var(--dark);text-decoration:none">
+                            {{ info.email }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <div class="contact-detail">Dinner Hours</div>
+                    <div class="contact-value">6:00 PM – 9:00 PM</div>
+                </div>
+
+                <div class="mb-5">
+                    <div class="contact-detail">Open</div>
+                    <div class="contact-value">Tuesday – Sunday</div>
+                </div>
+
+                <div class="mb-5">
+                    <div class="contact-detail">Closed</div>
+                    <div class="contact-value" style="color:#c0392b">Every Monday</div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'reserve' %}" class="btn-gold-solid">
+                        Make a Reservation
+                    </a>
+                </div>
+
             </div>
-            <div class="col-md-6">
-                <div class="contact-detail">Dinner Hours</div>
-                <div class="contact-value">6:00 PM – 9:00 PM</div>
 
-                <div class="contact-detail">Open</div>
-                <div class="contact-value">Tuesday – Sunday</div>
-
-                <div class="contact-detail">Closed</div>
-                <div class="contact-value">Every Monday</div>
+            <!-- Right — Google Map -->
+            <div class="col-lg-8">
+                <div style="border:1px solid var(--border);overflow:hidden;height:520px">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.827252442014!2d100.53220197480475!3d13.72890629782375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29f2bf8e686df%3A0x1c1e55cfc5217349!2s28%20Si%20Lom%20Rd%2C%20Khwaeng%20Suriya%20Wong%2C%20Khet%20Bang%20Rak%2C%20Krung%20Thep%20Maha%20Nakhon%2010500!5e0!3m2!1sen!2sth!4v1776659869256!5m2!1sen!2sth"
+                        width="100%"
+                        height="100%"
+                        style="border:0;display:block"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <p style="font-size:0.75rem;color:var(--muted);margin-top:0.8rem">
+                    28 Silom Road, Bangrak, Bangkok 10500
+                </p>
             </div>
-        </div>
 
-        <div class="mt-5">
-            <a href="{% url 'reserve' %}" class="btn-gold-solid">Make a Reservation</a>
         </div>
     </div>
 </section>
+
 {% endblock %}

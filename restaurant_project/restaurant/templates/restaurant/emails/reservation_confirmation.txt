@@ -1,0 +1,30 @@
+Dear {{ reservation.guest_name }},
+
+Thank you for your reservation request at Haruki.
+
+─────────────────────────────
+RESERVATION DETAILS
+─────────────────────────────
+Reference:   #{{ reservation.pk }}
+Date:        {{ reservation.date|date:"l, d F Y" }}
+Time:        {{ reservation.get_time_slot_display }}
+Party size:  {{ reservation.party_size }} guest{{ reservation.party_size|pluralize }}
+Status:      {{ reservation.get_status_display }}
+{% if reservation.special_requests %}
+Special requests: {{ reservation.special_requests }}
+{% endif %}
+─────────────────────────────
+
+We will confirm your reservation shortly. If you have any
+questions, please contact us at:
+
+    Phone: +66 2 123 4567
+    Email: reservations@haruki-bkk.com
+
+We look forward to welcoming you.
+
+Warm regards,
+Haruki Restaurant
+28 Silom Road, Bangrak, Bangkok 10500
+
+Tuesday – Sunday | Dinner from 6:00 PM
