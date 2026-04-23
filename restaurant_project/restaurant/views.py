@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils import timezone
-from .models import RestaurantInfo, DailyMenu, Reservation, CLOSED_DAYS, TIME_SLOT_CHOICES
+from .models import GalleryPhoto, RestaurantInfo, DailyMenu, Reservation, CLOSED_DAYS, TIME_SLOT_CHOICES
 import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
@@ -165,3 +165,18 @@ def update_reservation(request, pk):
             messages.success(request, f'Reservation #{reservation.pk} updated to {reservation.get_status_display()}.')
 
     return redirect('staff_reservations')
+
+def gallery(request):
+    category = request.GET.get('category', 'all')
+    photos   = GalleryPhoto.objects.filter(is_active=True)
+
+    if category != 'all':
+        photos = photos.filter(category=category)
+
+    photos_list = list(photos.values('id', 'title', 'image', 'category'))
+
+    return render(request, 'restaurant/gallery.html', {
+        'photos':      photos,
+        'photos_list': photos_list,
+        'category':    category,
+    })

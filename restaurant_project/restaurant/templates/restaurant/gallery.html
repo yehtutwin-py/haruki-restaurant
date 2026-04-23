@@ -1,0 +1,86 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}Gallery — Haruki{% endblock %}
+
+{% block content %}
+
+<section class="section-sm section-dark">
+    <div class="container" style="max-width:700px">
+        <span class="eyebrow" style="color:var(--gold-lt)">Our World</span>
+        <h1 style="font-size:3rem;color:#fff">Gallery</h1>
+        <div class="divider-gold-left"></div>
+    </div>
+</section>
+
+<section class="section section-cream">
+    <div class="container">
+
+        <div class="mb-5 text-center">
+            <a href="?category=all"
+               class="category-pill {% if category == 'all' %}active{% endif %}">
+                All
+            </a>
+            <a href="?category=ambience"
+               class="category-pill {% if category == 'ambience' %}active{% endif %}">
+                Ambience
+            </a>
+            <a href="?category=food"
+               class="category-pill {% if category == 'food' %}active{% endif %}">
+                Food
+            </a>
+            <a href="?category=chef"
+               class="category-pill {% if category == 'chef' %}active{% endif %}">
+                Chef
+            </a>
+            <a href="?category=events"
+               class="category-pill {% if category == 'events' %}active{% endif %}">
+                Events
+            </a>
+        </div>
+
+        {% if photos %}
+        <div class="gallery-grid" id="gallery-grid">
+            {% for photo in photos %}
+            <div class="gallery-item" data-index="{{ forloop.counter0 }}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
+                <div class="gallery-item-overlay">
+                    {% if photo.title %}
+                    <span class="gallery-item-title">{{ photo.title }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div style="text-align:center;padding:5rem 0;color:var(--muted)">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin-bottom:0.5rem">
+                No photos yet
+            </div>
+            <div style="font-size:0.88rem">Add photos in the admin panel.</div>
+        </div>
+        {% endif %}
+
+        <div class="mt-5 text-center">
+            <a href="{% url 'reserve' %}" class="btn-gold-solid">Reserve a Table</a>
+        </div>
+
+    </div>
+</section>
+
+<div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <button class="lightbox-nav lightbox-prev" onclick="prevPhoto(event)">&#8592;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" onclick="nextPhoto(event)">&#8594;</button>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+{{ photos_list|json_script:"gallery-data" }}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'restaurant/js/gallery.js' %}"></script>
+{% endblock %}

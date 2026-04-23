@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RestaurantInfo, MenuItem, DailyMenu, Reservation
+from .models import GalleryPhoto, RestaurantInfo, MenuItem, DailyMenu, Reservation
 
 
 @admin.register(RestaurantInfo)
@@ -29,3 +29,9 @@ class ReservationAdmin(admin.ModelAdmin):
     search_fields = ['guest_name', 'email']
     list_editable = ['status']
     date_hierarchy = 'date'
+    
+@admin.register(GalleryPhoto)
+class GalleryPhotoAdmin(admin.ModelAdmin):
+    list_display  = ['title', 'category', 'order', 'is_active']
+    list_filter   = ['category', 'is_active']
+    list_editable = ['order', 'is_active']

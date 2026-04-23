@@ -10,10 +10,13 @@
         <!-- Header -->
         <div style="font-size:0.82rem;color:var(--muted);text-align:right">
             Logged in as <strong style="color:var(--dark)">{{ request.user.username }}</strong><br>
-            <a href="{% url 'staff_logout' %}"
-            style="color:#c0392b;font-size:0.78rem;text-decoration:none;border-bottom:1px solid #c0392b">
-                Sign out
-            </a>
+            <form method="post" action="{% url 'staff_logout' %}" style="display:inline">
+                {% csrf_token %}
+                <button type="submit"
+                        style="background:none;border:none;padding:0;color:#c0392b;font-size:0.78rem;cursor:pointer;border-bottom:1px solid #c0392b;font-family:'Jost',sans-serif">
+                    Sign out
+                </button>
+            </form>
             &nbsp;&bull;&nbsp;
             <a href="/admin/" style="color:var(--gold)">Admin panel</a>
         </div>

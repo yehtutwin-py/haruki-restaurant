@@ -116,3 +116,24 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.guest_name} — {self.date} {self.time_slot} ({self.party_size} guests)"
+    
+class GalleryPhoto(models.Model):
+    CATEGORY_CHOICES = [
+        ('ambience', 'Ambience'),
+        ('food',     'Food'),
+        ('chef',     'Chef'),
+        ('events',   'Events'),
+    ]
+
+    title      = models.CharField(max_length=200, blank=True)
+    image      = models.ImageField(upload_to='gallery/')
+    category   = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ambience')
+    order      = models.PositiveIntegerField(default=0, help_text='Lower number shows first')
+    is_active  = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', '-id']
+
+    def __str__(self):
+        return self.title or f'Photo {self.id}'
+    

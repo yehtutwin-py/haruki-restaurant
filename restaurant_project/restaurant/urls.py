@@ -13,4 +13,5 @@ urlpatterns = [
     path('staff/reservations/<int:pk>/update/',  views.update_reservation,    name='update_reservation'),
     path('staff/login/',                         auth_views.LoginView.as_view(template_name='restaurant/staff_login.html'),  name='staff_login'),
     path('staff/logout/',                        auth_views.LogoutView.as_view(next_page='home'), name='staff_logout'),
+    path('gallery/',                             views.gallery,               name='gallery'),
 ]
