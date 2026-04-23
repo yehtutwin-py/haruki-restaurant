@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2d5c-g0mznim(&w+y4lwz!ky992txj_y+0(rvd30+sv%8wyrsw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://haruki9797.pythonanywhere.com/']
 
 
 # Application definition
@@ -73,14 +73,20 @@ WSGI_APPLICATION = 'restaurant_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ramen_db',            
+#         'USER': 'restaurant_user',     
+#         'PASSWORD': 'ramen1234',       
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ramen_db',            
-        'USER': 'restaurant_user',     
-        'PASSWORD': 'ramen1234',       
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':   os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
